@@ -110,17 +110,22 @@ def check_port():
 
 
 print("Hello, this is Arduino hex flasher!\n")
-sleep(1.0)
+sleep(0.5)
 
 is_windows = sys.platform.startswith('win')
 hex_path = ""
 port_name = ""
+board = ""
+
+print("Args: ", sys.argv)
 
 # Zabezpieczenia
-if (len(sys.argv) > 1 and len(sys.argv) <= 3):
-    hex_path = sys.argv[1]
-    port_name = sys.argv[2]
+if (len(sys.argv) == 4):
+    board = sys.argv[1]
+    hex_path = sys.argv[2]
+    port_name = sys.argv[3]
 
+    print(f"Board type: {board}")
     print(f"Hex File to flash: {hex_path}")
     print(f"Port name to flash: {port_name}")
     sleep(1.0)
@@ -132,15 +137,26 @@ if not check_port():
     print("Could not detect selected port. Aborting")
     exit()
 
-# Procedura flash
-serial_due_soft_reset(port_name, 1200)  # DUE - erase memory before flash
-port_name = wait_for_serial_port(port_name, get_serial_ports())
-if not (is_windows):
-    run_sub_cmd(
-        f"./bossac_linux --info --port \"{port_name}\" --write --verify --reset --erase -U true --boot {hex_path}")
-else:
-    run_sub_cmd(
-        f"bossac_win.exe --info --port \"{port_name}\" --write --verify --reset --erase -U true --boot {hex_path}")
+
+if (board == "due"):  # Procedura flash
+
+    serial_due_soft_reset(port_name, 1200)  # DUE - erase memory before flash
+    port_name = wait_for_serial_port(port_name, get_serial_ports())
+    if not (is_windows):
+        run_sub_cmd(
+            f"./tools/tool-bossac/bossac_linux --info --port \"{port_name}\" --write --verify --reset --erase -U true --boot {hex_path}")
+    else:
+        run_sub_cmd(
+            f"/tools/tool-bossac/bossac_win.exe --info --port \"{port_name}\" --write --verify --reset --erase -U true --boot {hex_path}")
+
+elif (board == "uno"):  # Procedura flash
+    if not (is_windows):
+        run_sub_cmd(
+            f"avrdude -v -p atmega328p -C ./tools/tool-avrdude/avrdude.conf -c arduino -b 115200 -D -P {port_name} -U flash:w:{hex_path}:i")
+    else:
+        run_sub_cmd(
+            f"avrdude -v -p atmega328p -C ./tools/tool-avrdude/avrdude.conf -c arduino -b 115200 -D -P {port_name} -U flash:w:{hex_path}:i")
+#
 
 print("\nFlash complete !")
 exit()
