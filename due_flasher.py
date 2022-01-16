@@ -133,7 +133,7 @@ if (len(sys.argv) == 4):
 else:
     print("(!) Number of arguments is invalid! Aborting...\n")
     print("Usage:\n")
-    print(" python due_flasher.py  <board> <hex file path>  <port name>\n")
+    print(" python due_flasher.py  <board name> <hex file path>  <port name>\n")
     print("availible_boards:", availible_boards)
     exit()
 
@@ -155,10 +155,10 @@ if (board == "due"):
 elif (board == "uno"):
     if not (is_windows):
         run_sub_cmd(
-            f"./tools/tool-avrdude/linux/avrdude -v -p atmega328p -C ./tools/tool-avrdude/avrdude.conf -c arduino -b 115200 -D -P {port_name} -U flash:w:{hex_path}:i")
+            f"./tools/tool-avrdude/linux/avrdude -v -p atmega328p -C ./tools/tool-avrdude/linux/avrdude.conf -c arduino -b 115200 -D -P {port_name} -U flash:w:{hex_path}:i")
     else:
         run_sub_cmd(
-            f"/tools/tool-avrdude/win/avrdude.exe -v -p atmega328p -C ./tools/tool-avrdude/avrdude.conf -c arduino -b 115200 -D -P {port_name} -U flash:w:{hex_path}:i")
+            f"/tools/tool-avrdude/win/avrdude.exe -v -p atmega328p -C ./tools/tool-avrdude/win/avrdude.conf -c arduino -b 115200 -D -P {port_name} -U flash:w:{hex_path}:i")
 
 print("\nFlash complete !")
 exit()
