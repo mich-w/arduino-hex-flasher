@@ -1,0 +1,22 @@
+{
+  "name": "tool-avrdude",
+  "version": "1.60300.200527",
+  "description": "AVRDUDE is a utility to download/upload/manipulate the ROM and EEPROM contents of AVR microcontrollers",
+  "keywords": [
+    "tools",
+    "uploader",
+    "microchip",
+    "avr"
+  ],
+  "homepage": "http://savannah.nongnu.org/projects/avrdude",
+  "license": "GPL-2.0-or-later",
+  "system": [
+    "windows",
+    "windows_amd64",
+    "windows_x86"
+  ],
+  "repository": {
+    "type": "svn",
+    "url": "http://svn.savannah.gnu.org/viewvc/avrdude/"
+  }
+}
