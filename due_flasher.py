@@ -146,6 +146,10 @@ if (board == "due"):
     serial_due_soft_reset(port_name, 1200)  # DUE - erase memory before flash
     port_name = wait_for_serial_port(port_name, get_serial_ports())
     if not (is_windows):
+
+        if not (port_name.startswith("/dev/")):
+            port_name = "/dev/" + port_name
+
         run_sub_cmd(
             f"./tools/tool-bossac/bossac_linux --info --port \"{port_name}\" --write --verify --reset --erase -U true --boot {hex_path}")
     else:
@@ -153,7 +157,12 @@ if (board == "due"):
             f"/tools/tool-bossac/bossac_win.exe --info --port \"{port_name}\" --write --verify --reset --erase -U true --boot {hex_path}")
 
 elif (board == "uno"):
+
     if not (is_windows):
+
+        if not (port_name.startswith("/dev/")):
+            port_name = "/dev/" + port_name
+
         run_sub_cmd(
             f"./tools/tool-avrdude/linux/avrdude -v -p atmega328p -C ./tools/tool-avrdude/linux/avrdude.conf -c arduino -b 115200 -D -P {port_name} -U flash:w:{hex_path}:i")
     else:
